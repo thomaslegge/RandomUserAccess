@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class UserTableViewCell: UITableViewCell {
     
@@ -21,13 +22,20 @@ class UserTableViewCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
     
-    func setCellData(user : User) {
-        titleLabel.text = (user.name?.title)! + " " + (user.name?.first)! + " " + (user.name?.last)!
-        subtitleLabel.text = (user.gender)!.capitalizingFirstLetter() + " : " + (user.dob?.date)!
+    func setCellData(user : NSManagedObject) {
+        
+        let titleName = user.value(forKeyPath: "titleName") as! String
+        let firstName = user.value(forKeyPath: "firstName") as! String
+        let lastName = user.value(forKeyPath: "lastName") as! String
+        let title = "\(titleName) \(firstName) \(lastName)"
+        
+        let gender = user.value(forKeyPath: "gender") as! String
+        let dob = user.value(forKeyPath: "dob") as! String
+        
+        titleLabel.text = title
+        subtitleLabel.text = "\(gender.capitalizingFirstLetter()) \(dob)"
     }
 
 }

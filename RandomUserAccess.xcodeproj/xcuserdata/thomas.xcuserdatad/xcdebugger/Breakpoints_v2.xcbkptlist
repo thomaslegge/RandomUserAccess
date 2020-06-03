@@ -3,4 +3,86 @@
    uuid = "2630B6D7-7676-42EF-BB20-058882F4BA0C"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B625D139-EF40-493D-BD37-AE9A4C9FD1B3"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "RandomUserAccess/ViewModel/UsersViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "52"
+            endingLineNumber = "52"
+            landmarkName = "SearchUsers(search:users:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "649E06A4-FCCA-40C6-A616-E694A0453D43"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "RandomUserAccess/ViewModel/UsersViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "44"
+            endingLineNumber = "44"
+            landmarkName = "SearchUsers(search:users:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FC0B5228-4119-469B-9CED-C5DD25D241E8"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "RandomUserAccess/ViewController/UserTableViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "55"
+            endingLineNumber = "55"
+            landmarkName = "searchFilterUpdate(search:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "FC0B5228-4119-469B-9CED-C5DD25D241E8 - e5913fff8a6f26d3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "RandomUserAccess.UserTableViewController.searchFilterUpdate(search: Swift.String) -&gt; ()"
+                  moduleName = "RandomUserAccess"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/thomas/Documents/Projects/RandomUserAccess/RandomUserAccess/ViewController/UserTableViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "74"
+                  endingLineNumber = "74"
+                  offsetFromSymbolStart = "35">
+               </Location>
+               <Location
+                  uuid = "FC0B5228-4119-469B-9CED-C5DD25D241E8 - 5abe0a9e37705276"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Array&lt;__C.NSManagedObject&gt;) -&gt; () in RandomUserAccess.UserTableViewController.searchFilterUpdate(search: Swift.String) -&gt; ()"
+                  moduleName = "RandomUserAccess"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/thomas/Documents/Projects/RandomUserAccess/RandomUserAccess/ViewController/UserTableViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "75"
+                  endingLineNumber = "75"
+                  offsetFromSymbolStart = "42">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

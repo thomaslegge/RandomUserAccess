@@ -12,9 +12,10 @@
 //   let userResponse = try? newJSONDecoder().decode(UserResponse.self, from: jsonData)
 
 import Foundation
+import CoreData
 
 // MARK: - UserResponse
-struct UserResponse: Codable {
+class UserResponse: Codable {
     let results: [User]?
     let info: Info?
 }
@@ -69,7 +70,7 @@ struct Coordinates: Codable {
 enum Postcode: Codable {
     case integer(Int)
     case string(String)
-
+    
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let x = try? container.decode(Int.self) {
@@ -82,7 +83,7 @@ enum Postcode: Codable {
         }
         throw DecodingError.typeMismatch(Postcode.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for Postcode"))
     }
-
+    
     func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         switch self {
@@ -103,7 +104,7 @@ struct Street: Codable {
 // MARK: - Timezone
 struct Timezone: Codable {
     let offset, timezoneDescription: String?
-
+    
     enum CodingKeys: String, CodingKey {
         case offset
         case timezoneDescription = "description"

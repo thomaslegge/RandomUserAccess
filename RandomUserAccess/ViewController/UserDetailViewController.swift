@@ -7,10 +7,12 @@
 //
 
 import UIKit
+import CoreData
 
 class UserDetailViewController: UIViewController {
-    var user : User?
-
+    
+    var user: NSManagedObject?
+    
     @IBOutlet weak var userImageLarge: UIImageView!
     @IBOutlet weak var userTitleLabel: UILabel!
     @IBOutlet weak var userSubtitleLabel: UILabel!
@@ -20,23 +22,21 @@ class UserDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        userTitleLabel.text = (user?.name?.title)! + " " + (user?.name?.first)! + " " + (user?.name?.last)!
-        userSubtitleLabel.text = (user?.gender)!.capitalizingFirstLetter() + " : " + (user?.dob?.date)!
-        userPhoneLabel.text = user?.phone
-        userEmailLabel.text = user?.email
-
-        // Do any additional setup after loading the view.
+        let titleName = user!.value(forKeyPath: "titleName") as! String
+        let firstName = user!.value(forKeyPath: "firstName") as! String
+        let lastName = user!.value(forKeyPath: "lastName") as! String
+        let title = "\(titleName) \(firstName) \(lastName)"
+        
+        let gender = user!.value(forKeyPath: "gender") as! String
+        let dob = user!.value(forKeyPath: "dob") as! String
+        
+        let phone = user!.value(forKeyPath: "phoneNumber") as! String
+        let email = user!.value(forKeyPath: "email") as! String
+        
+        userTitleLabel.text = title
+        userSubtitleLabel.text = "\(gender.capitalizingFirstLetter()) \(dob)"
+        userPhoneLabel.text = phone
+        userEmailLabel.text = email
+        
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
