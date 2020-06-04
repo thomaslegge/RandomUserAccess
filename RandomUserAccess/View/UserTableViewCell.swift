@@ -19,7 +19,7 @@ class UserTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
@@ -36,6 +36,9 @@ class UserTableViewCell: UITableViewCell {
         
         titleLabel.text = title
         subtitleLabel.text = "\(gender.capitalizingFirstLetter()) \(dob)"
+        
+        DispatchQueue.main.async {
+            UsersViewModel.UserImageSmall(user: user, imageView: self.imageLabel)
+        }
     }
-
 }

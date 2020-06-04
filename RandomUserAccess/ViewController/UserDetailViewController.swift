@@ -38,5 +38,9 @@ class UserDetailViewController: UIViewController {
         userPhoneLabel.text = phone
         userEmailLabel.text = email
         
+        DispatchQueue.main.async {
+            UsersViewModel.UserImageLarge(user: self.user!, imageView: self.userImageLarge)
+        }
+        
     }
 }

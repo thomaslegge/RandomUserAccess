@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreData
+import UIKit
 
 struct UsersViewModel {
     enum UserError: Error {
@@ -51,6 +52,42 @@ struct UsersViewModel {
             }
         }
         completion(results)
+    }
+    
+    // MARK: - Image downloading, cahcing, cache requesting
+    
+    private static func UserImageRequest(user: NSManagedObject, key: String, imageView: UIImageView) {
+        if user.value(forKeyPath: key) == nil {
+            
+            var keyUrl = "imageUrlSmall"
+            if key == "imageLarge" {
+                keyUrl = "imageUrlLarge"
+            }
+            
+            imageView.downloaded(from: user.value(forKeyPath: keyUrl) as! String) { result in
+                switch result {
+                case .failure(let error):
+                    print("UsersViewModel Error: ", error)
+                case .success( _):
+                    // TODO: - Unwrap safety //Saving pre image before other image can populate
+                    user.setValue(imageView.image!.jpegData(compressionQuality: 1.0), forKey: "imageSmall")
+                }
+            }
+        } else {
+            if let imageData = user.value(forKey: key) as? NSData {
+                if let image = UIImage(data:imageData as Data) {
+                    imageView.image = image
+                }
+            }
+        }
+    }
+    
+    static func UserImageLarge(user: NSManagedObject, imageView: UIImageView) {
+        UserImageRequest(user: user, key: "imageLarge", imageView: imageView)
+    }
+    
+    static func UserImageSmall(user: NSManagedObject, imageView: UIImageView) {
+        UserImageRequest(user: user, key: "imageSmall", imageView: imageView)
     }
     
     // TODO: - Refactor load/save from vc to here

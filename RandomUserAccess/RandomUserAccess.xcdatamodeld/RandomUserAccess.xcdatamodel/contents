@@ -6,11 +6,15 @@
         <attribute name="firstName" attributeType="String"/>
         <attribute name="gender" optional="YES" attributeType="String"/>
         <attribute name="id" attributeType="String"/>
+        <attribute name="imageLarge" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="imageSmall" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="imageUrlLarge" optional="YES" attributeType="String"/>
+        <attribute name="imageUrlSmall" optional="YES" attributeType="String"/>
         <attribute name="lastName" optional="YES" attributeType="String"/>
         <attribute name="phoneNumber" optional="YES" attributeType="String"/>
         <attribute name="titleName" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="StoredUser" positionX="-63" positionY="-18" width="128" height="28"/>
+        <element name="StoredUser" positionX="-63" positionY="-18" width="128" height="223"/>
     </elements>
 </model>

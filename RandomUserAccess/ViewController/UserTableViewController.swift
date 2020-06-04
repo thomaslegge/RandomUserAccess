@@ -42,7 +42,7 @@ class UserTableViewController: UITableViewController, UISearchBarDelegate {
             refreshUsersDisplaying()
         }
     }
-
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if let searchString = userSearchBar.text, !searchString.isEmpty {
             searchFilterUpdate(search: searchString)
@@ -50,14 +50,14 @@ class UserTableViewController: UITableViewController, UISearchBarDelegate {
             refreshUsersDisplaying()
         }
     }
-
+    
     func searchFilterUpdate(search: String) {
         UsersViewModel.SearchUsers(search: search, users: self.completeStoredUsers) { result in
             self.displayStoredUsers = result
             self.updateDisplay()
         }
     }
-
+    
     func refreshUsersDisplaying() {
         self.displayStoredUsers = self.completeStoredUsers
         updateDisplay()
@@ -133,7 +133,24 @@ class UserTableViewController: UITableViewController, UISearchBarDelegate {
         userToSave.setValue(user.email, forKey: "email")
         userToSave.setValue(user.dob?.date, forKey: "dob")
         userToSave.setValue(user.gender, forKey: "gender")
-
+        
+        userToSave.setValue(user.picture?.thumbnail, forKey: "imageUrlSmall")
+        userToSave.setValue(user.picture?.large, forKey: "imageUrlLarge")
+        
+        //        UsersViewModel.WebRequestImage(imageUrl: (user.picture?.thumbnail)!) { result in
+        //            switch result {
+        //            case .failure(let error):
+        //                print("UsersViewModel Error: ", error)
+        //            case .success(let data):
+        //                // Main thread for UI
+        //                DispatchQueue.main.async {
+        //                    userToSave.setValue(data, forKey: "imageSmall")
+        //                    self.updateDisplay()
+        //                }
+        //            }
+        //        }
+        
+        
         do {
             try managedContext.save()
             self.displayStoredUsers.append(userToSave)
@@ -153,7 +170,7 @@ class UserTableViewController: UITableViewController, UISearchBarDelegate {
         let cell = tableView.dequeueReusableCell(withIdentifier: "UserTabelViewCell", for: indexPath) as! UserTableViewCell
         
         cell.setCellData(user: displayStoredUsers[indexPath.row])
-//        cell.titleLabel.text = displayStoredUsers[indexPath.row].value(forKeyPath: "firstName") as? String
+        //        cell.titleLabel.text = displayStoredUsers[indexPath.row].value(forKeyPath: "firstName") as? String
         
         return cell
     }
