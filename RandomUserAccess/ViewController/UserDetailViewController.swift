@@ -37,9 +37,9 @@ class UserDetailViewController: UIViewController {
         let email = user!.value(forKeyPath: "email") as! String
         
         userTitleLabel.text = title
-        userSubtitleLabel.text = "\(gender.capitalizingFirstLetter()) \(date)"
-        userPhoneLabel.text = phone
-        userEmailLabel.text = email
+        userSubtitleLabel.text = "🎂 \(gender.capitalizingFirstLetter()) \(date)"
+        userPhoneLabel.text = "📱 \(phone)"
+        userEmailLabel.text = "📤 \(email)"
         
         DispatchQueue.main.async {
             UsersViewModel.UserImageLarge(user: self.user!, imageView: self.userImageLarge)
