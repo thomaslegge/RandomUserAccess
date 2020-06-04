@@ -96,6 +96,41 @@ class UserCodeableParse: XCTestCase {
         let response = try JSONDecoder().decode(UserResponse.self, from: testUserString)
         XCTAssert(response.results![0].name!.last! == "Johansen")
     }
+    
+    func testUserPhoneParse() throws {
+        let response = try JSONDecoder().decode(UserResponse.self, from: testUserString)
+        XCTAssert(response.results![0].phone! == "64241793")
+    }
+    
+    func testUserEmailParse() throws {
+        let response = try JSONDecoder().decode(UserResponse.self, from: testUserString)
+        XCTAssert(response.results![0].email! == "isabella.johansen@example.com")
+    }
+    
+    func testUserGenderParse() throws {
+        let response = try JSONDecoder().decode(UserResponse.self, from: testUserString)
+        XCTAssert(response.results![0].gender! == "female")
+    }
+    
+    func testUserDOBParse() throws {
+        let response = try JSONDecoder().decode(UserResponse.self, from: testUserString)
+        XCTAssert(response.results![0].dob!.date! == "1951-09-09T20:20:57.243Z")
+    }
+    
+    func testUserIDParse() throws {
+        let response = try JSONDecoder().decode(UserResponse.self, from: testUserString)
+        XCTAssert(response.results![0].login!.uuid! == "643a94f3-ddf0-4d92-bbdf-942e7a7472bf")
+    }
+    
+    func testUserImageUrlThumbnail() throws {
+        let response = try JSONDecoder().decode(UserResponse.self, from: testUserString)
+        XCTAssert(response.results![0].picture!.thumbnail! == "https://randomuser.me/api/portraits/thumb/women/43.jpg")
+    }
+    
+    func testUserImageUrlLarge() throws {
+        let response = try JSONDecoder().decode(UserResponse.self, from: testUserString)
+        XCTAssert(response.results![0].picture!.large! == "https://randomuser.me/api/portraits/women/43.jpg")
+    }
 
     func testPerformanceExample() throws {
         // This is an example of a performance test case.

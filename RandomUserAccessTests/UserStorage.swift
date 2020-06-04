@@ -82,6 +82,8 @@ class UserStorage: XCTestCase {
     }
     """.data(using: .utf8)!
     
+    var completeStoredUsers: [NSManagedObject] = []
+    
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "RandomUserAccess")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
@@ -109,6 +111,39 @@ class UserStorage: XCTestCase {
     override func setUpWithError() throws {
         deleteAllData("StoredUser")
         
+        let response = try JSONDecoder().decode(UserResponse.self, from: testUserString)
+        
+        for user in response.results! {
+            let managedContext = persistentContainer.viewContext
+            let entity = NSEntityDescription.entity(forEntityName: "StoredUser", in: managedContext)!
+            let userToSave = NSManagedObject(entity: entity, insertInto: managedContext)
+            
+            userToSave.setValue(user.login?.uuid, forKey: "id")
+            userToSave.setValue(user.name?.first, forKey: "firstName")
+            userToSave.setValue(user.name?.last, forKey: "lastName")
+            userToSave.setValue(user.name?.title, forKey: "titleName")
+            userToSave.setValue(user.phone, forKey: "phoneNumber")
+            userToSave.setValue(user.email, forKey: "email")
+            userToSave.setValue(user.dob?.date, forKey: "dob")
+            userToSave.setValue(user.gender, forKey: "gender")
+            
+            userToSave.setValue(user.picture?.thumbnail, forKey: "imageUrlSmall")
+            userToSave.setValue(user.picture?.large, forKey: "imageUrlLarge")
+            
+            do {
+                try managedContext.save()
+            } catch let error as NSError {
+                print("Could not save. \(error), \(error.userInfo)")
+            }
+        }
+        
+        let managedContext = persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "StoredUser")
+        do {
+            completeStoredUsers = try managedContext.fetch(fetchRequest)
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+        }
         
     }
 
@@ -131,7 +166,7 @@ class UserStorage: XCTestCase {
             print("Could not fetch. \(error), \(error.userInfo)")
         }
         
-        XCTAssert(completeStoredUsers.count == 1)
+        XCTAssert(completeStoredUsers.count == 2)
     }
     
     func testLoadUsersLocal() throws {
@@ -163,10 +198,51 @@ class UserStorage: XCTestCase {
         
         ///Function Tested
         UsersViewModel.LoadUserLocal(persistentContainer) {result in
-            XCTAssert(result.count == 1)
+            XCTAssert(result.count == 2)
         }
     }
-
+    
+    func testStoredUserTitleName() throws {
+        let titleName = completeStoredUsers[0].value(forKeyPath: "titleName") as! String
+        XCTAssert(titleName == "Miss")
+    }
+    func testStoredUserFirstName() throws {
+        let titleName = completeStoredUsers[0].value(forKeyPath: "FirstName") as! String
+        XCTAssert(titleName == "Isabella")
+    }
+    func testStoredUserLastName() throws {
+        let titleName = completeStoredUsers[0].value(forKeyPath: "LastName") as! String
+        XCTAssert(titleName == "Johansen")
+    }
+    func testStoredUserId() throws {
+        let titleName = completeStoredUsers[0].value(forKeyPath: "id") as! String
+        XCTAssert(titleName == "643a94f3-ddf0-4d92-bbdf-942e7a7472bf")
+    }
+    func testStoredUserPhone() throws {
+        let titleName = completeStoredUsers[0].value(forKeyPath: "phoneNumber") as! String
+        XCTAssert(titleName == "64241793")
+    }
+    func testStoredUserEmail() throws {
+        let titleName = completeStoredUsers[0].value(forKeyPath: "email") as! String
+        XCTAssert(titleName == "isabella.johansen@example.com")
+    }
+    func testStoredUserDOB() throws {
+        let titleName = completeStoredUsers[0].value(forKeyPath: "dob") as! String
+        XCTAssert(titleName == "1951-09-09T20:20:57.243Z")
+    }
+    func testStoredUserGender() throws {
+        let titleName = completeStoredUsers[0].value(forKeyPath: "gender") as! String
+        XCTAssert(titleName == "female")
+    }
+    func testStoredUserImageUrlSmall() throws {
+        let titleName = completeStoredUsers[0].value(forKeyPath: "imageUrlSmall") as! String
+        XCTAssert(titleName == "https://randomuser.me/api/portraits/thumb/women/43.jpg")
+    }
+    func testStoredUserImageUrlLarge() throws {
+        let titleName = completeStoredUsers[0].value(forKeyPath: "imageUrlLarge") as! String
+        XCTAssert(titleName == "https://randomuser.me/api/portraits/women/43.jpg")
+    }
+    
     func testPerformanceExample() throws {
         // This is an example of a performance test case.
         self.measure {
