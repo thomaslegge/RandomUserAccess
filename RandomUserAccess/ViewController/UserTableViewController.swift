@@ -9,31 +9,42 @@
 import UIKit
 import CoreData
 
+// TODO: - Refactor
+struct Section {
+    var letter : String
+    var users : [NSManagedObject]
+}
+
 class UserTableViewController: UITableViewController, UISearchBarDelegate {
     
     @IBOutlet weak var userSearchBar: UISearchBar!
     @IBOutlet weak var scrollRefreshControll: UIRefreshControl!
     @IBAction func userRefresh(_ sender: UIRefreshControl) {
-        updateUserData(search: "refresh")
+        getUserData()
     }
     
     var completeStoredUsers: [NSManagedObject] = []
     var displayStoredUsers: [NSManagedObject] = []
+    var userSectionsDisplay = [Section]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         userSearchBar.delegate = self
-        updateUserData(search: nil)
         
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
+        if completeStoredUsers.count <= 0 {
+            LoadUserLocal()
+            if completeStoredUsers.count <= 0 {
+                getUserData()
+                return //Do not do redundant refresh
+            }
+        } else {
+            return //Do not do redundant refresh
+        }
         
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        refreshUsersDisplaying()
     }
     
     // MARK: - Search Filter
-    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
         if let searchString = userSearchBar.text, !searchString.isEmpty {
@@ -42,7 +53,7 @@ class UserTableViewController: UITableViewController, UISearchBarDelegate {
             refreshUsersDisplaying()
         }
     }
-    
+
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if let searchString = userSearchBar.text, !searchString.isEmpty {
             searchFilterUpdate(search: searchString)
@@ -58,6 +69,7 @@ class UserTableViewController: UITableViewController, UISearchBarDelegate {
         }
     }
     
+    // MARK: - Refresh and update
     func refreshUsersDisplaying() {
         self.displayStoredUsers = self.completeStoredUsers
         updateDisplay()
@@ -65,18 +77,23 @@ class UserTableViewController: UITableViewController, UISearchBarDelegate {
     
     func updateDisplay() {
         DispatchQueue.main.async {
+            /// MARK: - TODO Refactor
+            let groupedDictionary = Dictionary(grouping: self.displayStoredUsers, by: {String(($0.value(forKeyPath: "firstName") as! String).prefix(1))})
+            // get the keys and sort them
+            let keys = groupedDictionary.keys.sorted()
+            self.userSectionsDisplay = keys.map{
+                // Sort dict entries
+                Section(letter: $0, users: groupedDictionary[$0]!.sorted { (first, second) -> Bool in
+                    return second.value(forKeyPath: "firstName") as! String > first.value(forKeyPath: "firstName") as! String
+                    }
+                )
+            }
             self.tableView.reloadData()
         }
     }
     
-    // MARK: - Table Updater
-    
-    func updateUserData(search: String?) {
-        
-        LoadUserLocal()
-        self.tableView.reloadData()
-        //#TODO run once and cache
-        
+    // MARK: - Get Data
+    func getUserData() {
         UsersViewModel.WebRequestUsers { result in
             switch result {
             case .failure(let error):
@@ -88,30 +105,23 @@ class UserTableViewController: UITableViewController, UISearchBarDelegate {
                         self.SaveUserLocal(user: user)
                     }
                     self.LoadUserLocal()
-                    
-                    self.tableView.reloadData()
                     self.scrollRefreshControll.endRefreshing()
+                    self.refreshUsersDisplaying()
                 }
             }
         }
     }
     
     // MARK: - Core Data
-    
     func LoadUserLocal() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            return
-        }
-        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return}
         let managedContext = appDelegate.persistentContainer.viewContext
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "StoredUser")
-        
         do {
             self.completeStoredUsers = try managedContext.fetch(fetchRequest)
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
         }
-        
         refreshUsersDisplaying()
     }
     
@@ -137,83 +147,89 @@ class UserTableViewController: UITableViewController, UISearchBarDelegate {
         userToSave.setValue(user.picture?.thumbnail, forKey: "imageUrlSmall")
         userToSave.setValue(user.picture?.large, forKey: "imageUrlLarge")
         
-        //        UsersViewModel.WebRequestImage(imageUrl: (user.picture?.thumbnail)!) { result in
-        //            switch result {
-        //            case .failure(let error):
-        //                print("UsersViewModel Error: ", error)
-        //            case .success(let data):
-        //                // Main thread for UI
-        //                DispatchQueue.main.async {
-        //                    userToSave.setValue(data, forKey: "imageSmall")
-        //                    self.updateDisplay()
-        //                }
-        //            }
-        //        }
-        
-        
         do {
             try managedContext.save()
-            self.displayStoredUsers.append(userToSave)
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
         }
-        updateDisplay()
     }
     
     // MARK: - Table view data source
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return displayStoredUsers.count
-    }
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "UserTabelViewCell", for: indexPath) as! UserTableViewCell
-        
-        cell.setCellData(user: displayStoredUsers[indexPath.row])
-        //        cell.titleLabel.text = displayStoredUsers[indexPath.row].value(forKeyPath: "firstName") as? String
-        
+        let user = userSectionsDisplay[indexPath.section].users[indexPath.row]
+        cell.setCellData(user: user)
         return cell
     }
-    
-    /*
-     // Override to support conditional editing of the table view.
-     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-     // Return false if you do not want the specified item to be editable.
-     return true
-     }
-     */
-    
-    /*
-     // Override to support editing the table view.
-     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-     if editingStyle == .delete {
-     // Delete the row from the data source
-     tableView.deleteRows(at: [indexPath], with: .fade)
-     } else if editingStyle == .insert {
-     // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-     }
-     }
-     */
-    
-    /*
-     // Override to support rearranging the table view.
-     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-     
-     }
-     */
-    
-    /*
-     // Override to support conditional rearranging of the table view.
-     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-     // Return false if you do not want the item to be re-orderable.
-     return true
-     }
-     */
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return userSectionsDisplay[section].users.count
+    }
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return userSectionsDisplay.count
+    }
+    override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+        return userSectionsDisplay.map{$0.letter}
+    }
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return userSectionsDisplay[section].letter
+    }
     
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if(segue.identifier == "userDetailView") {
-            (segue.destination as! UserDetailViewController).user = displayStoredUsers[self.tableView.indexPathForSelectedRow!.row]
+            let section = userSectionsDisplay[self.tableView.indexPathForSelectedRow!.section]
+            (segue.destination as! UserDetailViewController).user = section.users[self.tableView.indexPathForSelectedRow!.row]
         }
     }
 }
+
+// MARK: - Refactor
+
+//    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        return displayStoredUsers.count
+//    }
+//
+//    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        let cell = tableView.dequeueReusableCell(withIdentifier: "UserTabelViewCell", for: indexPath) as! UserTableViewCell
+//
+//        cell.setCellData(user: displayStoredUsers[indexPath.row])
+//        //        cell.titleLabel.text = displayStoredUsers[indexPath.row].value(forKeyPath: "firstName") as? String
+//
+//        return cell
+//    }
+
+/*
+ // Override to support conditional editing of the table view.
+ override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+ // Return false if you do not want the specified item to be editable.
+ return true
+ }
+ */
+
+/*
+ // Override to support editing the table view.
+ override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+ if editingStyle == .delete {
+ // Delete the row from the data source
+ tableView.deleteRows(at: [indexPath], with: .fade)
+ } else if editingStyle == .insert {
+ // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+ }
+ }
+ */
+
+/*
+ // Override to support rearranging the table view.
+ override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
+ 
+ }
+ */
+
+/*
+ // Override to support conditional rearranging of the table view.
+ override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+ // Return false if you do not want the item to be re-orderable.
+ return true
+ }
+ */

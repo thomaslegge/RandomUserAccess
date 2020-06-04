@@ -39,54 +39,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "FC0B5228-4119-469B-9CED-C5DD25D241E8"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "RandomUserAccess/ViewController/UserTableViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "55"
-            endingLineNumber = "55"
-            landmarkName = "searchFilterUpdate(search:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "FC0B5228-4119-469B-9CED-C5DD25D241E8 - e5913fff8a6f26d3"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "RandomUserAccess.UserTableViewController.searchFilterUpdate(search: Swift.String) -&gt; ()"
-                  moduleName = "RandomUserAccess"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomas/Documents/Projects/RandomUserAccess/RandomUserAccess/ViewController/UserTableViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "74"
-                  endingLineNumber = "74"
-                  offsetFromSymbolStart = "35">
-               </Location>
-               <Location
-                  uuid = "FC0B5228-4119-469B-9CED-C5DD25D241E8 - 5abe0a9e37705276"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Array&lt;__C.NSManagedObject&gt;) -&gt; () in RandomUserAccess.UserTableViewController.searchFilterUpdate(search: Swift.String) -&gt; ()"
-                  moduleName = "RandomUserAccess"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/thomas/Documents/Projects/RandomUserAccess/RandomUserAccess/ViewController/UserTableViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "75"
-                  endingLineNumber = "75"
-                  offsetFromSymbolStart = "42">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "4B3FD5D0-2F67-4910-A6EB-DC580399BD23"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -97,6 +49,22 @@
             startingLineNumber = "43"
             endingLineNumber = "43"
             landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A2F81FE4-7604-4EB9-B871-E949CDE620E0"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "RandomUserAccess/ViewController/UserTableViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "91"
+            endingLineNumber = "91"
+            landmarkName = "updateDisplay()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
