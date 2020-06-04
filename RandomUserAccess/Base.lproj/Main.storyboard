@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="1WP-J0-PlD">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -32,8 +33,8 @@
                                             <rect key="frame" x="0.0" y="-1" width="414" height="44"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person.circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="nD9-E1-4Jd">
-                                                    <rect key="frame" x="0.0" y="0.5" width="50" height="43"/>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="PersonCircle" translatesAutoresizingMaskIntoConstraints="NO" id="nD9-E1-4Jd">
+                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="44"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="50" id="OD7-qc-jj2"/>
                                                         <constraint firstAttribute="height" constant="44" id="cKL-pn-OfV"/>
@@ -102,8 +103,8 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="btd-7L-euw">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Vro-tQ-gt3">
-                                        <rect key="frame" x="0.0" y="1.5" width="414" height="677"/>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="PersonCircle" translatesAutoresizingMaskIntoConstraints="NO" id="Vro-tQ-gt3">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="680"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="680" id="tha-7m-PEo"/>
                                         </constraints>
@@ -181,7 +182,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="person.circle" catalog="system" width="128" height="121"/>
-        <image name="person.fill" catalog="system" width="128" height="120"/>
+        <image name="PersonCircle" width="129" height="130"/>
     </resources>
 </document>

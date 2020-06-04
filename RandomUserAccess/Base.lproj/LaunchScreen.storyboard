@@ -16,31 +16,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="w6F-w9-lP4">
-                                <rect key="frame" x="0.0" y="44" width="100" height="818"/>
-                                <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ldz-WI-1mw">
-                                        <rect key="frame" x="0.0" y="0.0" width="100" height="818"/>
-                                    </stackView>
-                                </subviews>
-                            </stackView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="Regular-L" translatesAutoresizingMaskIntoConstraints="NO" id="YDn-ux-qGJ">
-                                <rect key="frame" x="157" y="398" width="100" height="100"/>
+                                <rect key="frame" x="40.5" y="281.5" width="333" height="333"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="1RK-pm-Cnc"/>
-                                    <constraint firstAttribute="height" constant="100" id="4wJ-PF-pKS"/>
+                                    <constraint firstAttribute="width" constant="333" id="1RK-pm-Cnc"/>
+                                    <constraint firstAttribute="height" constant="333" id="4wJ-PF-pKS"/>
                                 </constraints>
                                 <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="default"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.5607843137254902" green="0.0" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="w6F-w9-lP4" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="Dcf-i7-zXX"/>
-                            <constraint firstAttribute="trailing" secondItem="w6F-w9-lP4" secondAttribute="trailing" constant="314" id="PQ2-kl-Gh7"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="w6F-w9-lP4" secondAttribute="bottom" id="d32-yz-wc2"/>
-                            <constraint firstItem="YDn-ux-qGJ" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="q80-go-IdT"/>
-                            <constraint firstItem="w6F-w9-lP4" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="rbi-4f-xHG"/>
-                            <constraint firstItem="YDn-ux-qGJ" firstAttribute="leading" secondItem="w6F-w9-lP4" secondAttribute="trailing" constant="57" id="zhU-eI-ri2"/>
+                            <constraint firstItem="YDn-ux-qGJ" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="6oP-91-1xu"/>
+                            <constraint firstItem="YDn-ux-qGJ" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="bm8-ye-QTW"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
