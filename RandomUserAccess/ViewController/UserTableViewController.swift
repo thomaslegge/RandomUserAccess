@@ -66,7 +66,7 @@ class UserTableViewController: UITableViewController, UISearchBarDelegate {
     
     /// Search on view model then store result and update display
     func searchFilterUpdate(search: String) {
-        UsersViewModel.SearchUsersFirstName(search: search, users: self.completeStoredUsers) { result in
+        UsersViewModel.SearchUsersNames(search: search, users: self.completeStoredUsers) { result in
             self.displayStoredUsers = result
             self.updateDisplay()
         }
@@ -127,7 +127,7 @@ class UserTableViewController: UITableViewController, UISearchBarDelegate {
     
     /// Local Caller Helper for view model static func
     func SaveUsersLocal(_ users: [User]) {
-        UsersViewModel.SaveUsersLocal(users)
+        UsersViewModel.SaveUsersLocal(users: users)
     }
     
     // MARK: - Table view data source

@@ -16,7 +16,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "55"
             endingLineNumber = "55"
-            landmarkName = "SearchUsersFirstName(search:users:completion:)"
+            landmarkName = "SearchUsersNames(search:users:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -32,7 +32,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "47"
             endingLineNumber = "47"
-            landmarkName = "SearchUsersFirstName(search:users:completion:)"
+            landmarkName = "SearchUsersNames(search:users:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

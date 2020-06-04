@@ -41,7 +41,7 @@ struct UsersViewModel {
     }
     
     /// Logic for searching given user list by first name
-    static func SearchUsersFirstName(search : String, users: [NSManagedObject], completion: @escaping ([NSManagedObject]) -> ()) {
+    static func SearchUsersNames(search : String, users: [NSManagedObject], completion: @escaping ([NSManagedObject]) -> ()) {
         var results:[NSManagedObject] = []
         let search = search.lowercased()
         
@@ -94,15 +94,25 @@ struct UsersViewModel {
         UserImageRequest(user: user, key: "imageSmall", imageView: imageView)
     }
     
+    /// Get NSPersistentContainer container from AppDelegate for CoreData use
+    /// - Returns: NSPersistentContainer?
+    private static func getPersistentContainer() -> NSPersistentContainer? {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return nil }
+        return appDelegate.persistentContainer
+    }
+    
     // MARK: - Loading and Saving users locally
     /// Load stored user values
     /// - Parameter completion: on completion pass result of this fetch
     /// - Returns: @escaping [NSManagedObject]
-    static func LoadUserLocal(completion: @escaping ([NSManagedObject]) -> ()) {
+    static func LoadUserLocal(_ container: NSPersistentContainer? = UsersViewModel.getPersistentContainer(), completion: @escaping ([NSManagedObject]) -> ()) {
+        
+        //Check container not nil
+        guard let container = container else { return }
+        
         var completeStoredUsers: [NSManagedObject] = []
         
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return}
-        let managedContext = appDelegate.persistentContainer.viewContext
+        let managedContext = container.viewContext
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "StoredUser")
         do {
             completeStoredUsers = try managedContext.fetch(fetchRequest)
@@ -114,13 +124,11 @@ struct UsersViewModel {
     
     /// Save given users array of type [User] to storage
     /// - Parameter user: [User] of values to save
-    static func SaveUsersLocal(_ users: [User]) {
+    static func SaveUsersLocal(_ container: NSPersistentContainer? = UsersViewModel.getPersistentContainer(), users: [User]) {
+        guard let container = container else { return }
+
         for user in users {
-            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-                return
-            }
-            
-            let managedContext = appDelegate.persistentContainer.viewContext
+            let managedContext = container.viewContext
             let entity = NSEntityDescription.entity(forEntityName: "StoredUser", in: managedContext)!
             let userToSave = NSManagedObject(entity: entity, insertInto: managedContext)
             
