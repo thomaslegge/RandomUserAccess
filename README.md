@@ -3,25 +3,25 @@
 - Swift, iOS 10 Compatible
 - MVVM conforming, maintainable and testable multithreaded architecture
 - UIKit, CoreData, Grand Central Dispatch, Codable, URLSession, Storyboards
-- XCTest: In depth testing, 
+- XCTest: In-depth testing, 
 
 ![Banner](images/RandomUserAccessBanner.png)
 
-## Noteable Features:
+## Notable Features:
 - CoreData based automatic offline saving and caching
 - Scrollable table display list of users with images
 - Pull to refresh and request more users
 - Dynamic type to search functionality to filter by searched name
 - Sectioned pagination by name, sorted alphabetically, generated automatically
 - Detailed view of the user with contact information
-- Web image cache saving only what you need when you need it to keep memory footprint low
+- Web image cache saving only what you need when you need it to keep the memory footprint low
 
 ## In the future:
-- The data is solid, however the images are very low res, I would like to use [Unsplash](https://unsplash.com/t/people) API for portraits
-- I woud like to work on the UI and make some visual changed to how the information is displayed, it is very simple as the focus was on the performant data storage and searching/retreival
-- The data structure that parses the web response is rather simple, I may change it to better represent the data given; eg: Date() type rather than String amoung others
+- The data is solid, however, the images are very low res, I would like to use [Unsplash](https://unsplash.com/t/people) API for portraits
+- I would like to work on the UI and make some visual changed to how the information is displayed, it is very simple as the focus was on the performant data storage and searching/retrieval
+- The data structure that parses the web response is rather simple, I may change it to better represent the data given; eg: Date() type rather than String among others
 
 ### I would like the different data points displayed to link elsewhere eg:
-- To the indivisuals "website", to the phone app or location to maps
-- Perhaps UIMapKit to display there location in app
-- It would be interesting to use device location to check distance from "user" similar to find friends.
+- To the individuals "website", to the phone app or location to maps
+- Perhaps UIMapKit to display their location in the app
+- It would be interesting to use device location to check the distance from "user" similar to find friends.
