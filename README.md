@@ -19,6 +19,7 @@
 ## In the future:
 - The data is solid, however the images are very low res, I would like to use [Unsplash](https://unsplash.com/t/people) API for portraits
 - I woud like to work on the UI and make some visual changed to how the information is displayed, it is very simple as the focus was on the performant data storage and searching/retreival
+- The data structure that parses the web response is rather simple, I may change it to better represent the data given; eg: Date() type rather than String amoung others
 
 ### I would like the different data points displayed to link elsewhere eg:
 - To the indivisuals "website", to the phone app or location to maps
