@@ -10,16 +10,17 @@ import Foundation
 import CoreData
 import UIKit
 
+/// Non view logic for handeling user data
 struct UsersViewModel {
+    /// Custom error types to return in request results
     enum UserError: Error {
         case noDataAvailable
         case cannotProccesData
     }
     
+    /// Static function to retrive data from API and decode returned JSON users, escapes to work with result
     static func WebRequestUsers(completion: @escaping (Result<[User], Error>) -> ()) {
-        //#TODO: improve url building
         let urlString = "https://randomuser.me/api/?results=4"
-        
         guard let url = URL(string: urlString) else {fatalError("Invalid URL")}
         URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data, error == nil else {
@@ -39,7 +40,8 @@ struct UsersViewModel {
         }.resume()
     }
     
-    static func SearchUsers(search : String, users: [NSManagedObject], completion: @escaping ([NSManagedObject]) -> ()) {
+    /// Logic for searching given user list by first name
+    static func SearchUsersFirstName(search : String, users: [NSManagedObject], completion: @escaping ([NSManagedObject]) -> ()) {
         var results:[NSManagedObject] = []
         let search = search.lowercased()
         
@@ -55,7 +57,7 @@ struct UsersViewModel {
     }
     
     // MARK: - Image downloading, cahcing, cache requesting
-    
+    /// Request saves and retrives images as needed and sets given UIImageView Accordingly
     private static func UserImageRequest(user: NSManagedObject, key: String, imageView: UIImageView) {
         if user.value(forKeyPath: key) == nil {
             
@@ -82,44 +84,63 @@ struct UsersViewModel {
         }
     }
     
+    /// Caller to use the image request on large images
     static func UserImageLarge(user: NSManagedObject, imageView: UIImageView) {
         UserImageRequest(user: user, key: "imageLarge", imageView: imageView)
     }
     
+    /// Caller to use the image request on small images
     static func UserImageSmall(user: NSManagedObject, imageView: UIImageView) {
         UserImageRequest(user: user, key: "imageSmall", imageView: imageView)
     }
     
-    // TODO: - Refactor load/save from vc to here
+    // MARK: - Loading and Saving users locally
+    /// Load stored user values
+    /// - Parameter completion: on completion pass result of this fetch
+    /// - Returns: @escaping [NSManagedObject]
+    static func LoadUserLocal(completion: @escaping ([NSManagedObject]) -> ()) {
+        var completeStoredUsers: [NSManagedObject] = []
+        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return}
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "StoredUser")
+        do {
+            completeStoredUsers = try managedContext.fetch(fetchRequest)
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+        }
+        completion(completeStoredUsers)
+    }
     
-    //    static func WriteToLocal(name: String) {
-    //
-    //      guard let appDelegate =
-    //        UIApplication.shared.delegate as? AppDelegate else {
-    //        return
-    //      }
-    //
-    //      // 1
-    //      let managedContext =
-    //        appDelegate.persistentContainer.viewContext
-    //
-    //      // 2
-    //      let entity =
-    //        NSEntityDescription.entity(forEntityName: "Person",
-    //                                   in: managedContext)!
-    //
-    //      let person = NSManagedObject(entity: entity,
-    //                                   insertInto: managedContext)
-    //
-    //      // 3
-    //      person.setValue(name, forKeyPath: "name")
-    //
-    //      // 4
-    //      do {
-    //        try managedContext.save()
-    //        people.append(person)
-    //      } catch let error as NSError {
-    //        print("Could not save. \(error), \(error.userInfo)")
-    //      }
-    //    }
+    /// Save given users array of type [User] to storage
+    /// - Parameter user: [User] of values to save
+    static func SaveUsersLocal(_ users: [User]) {
+        for user in users {
+            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+                return
+            }
+            
+            let managedContext = appDelegate.persistentContainer.viewContext
+            let entity = NSEntityDescription.entity(forEntityName: "StoredUser", in: managedContext)!
+            let userToSave = NSManagedObject(entity: entity, insertInto: managedContext)
+            
+            userToSave.setValue(user.login?.uuid, forKey: "id")
+            userToSave.setValue(user.name?.first, forKey: "firstName")
+            userToSave.setValue(user.name?.last, forKey: "lastName")
+            userToSave.setValue(user.name?.title, forKey: "titleName")
+            userToSave.setValue(user.phone, forKey: "phoneNumber")
+            userToSave.setValue(user.email, forKey: "email")
+            userToSave.setValue(user.dob?.date, forKey: "dob")
+            userToSave.setValue(user.gender, forKey: "gender")
+            
+            userToSave.setValue(user.picture?.thumbnail, forKey: "imageUrlSmall")
+            userToSave.setValue(user.picture?.large, forKey: "imageUrlLarge")
+            
+            do {
+                try managedContext.save()
+            } catch let error as NSError {
+                print("Could not save. \(error), \(error.userInfo)")
+            }
+        }
+    }
 }

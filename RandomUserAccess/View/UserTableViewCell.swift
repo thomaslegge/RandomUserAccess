@@ -15,7 +15,6 @@ class UserTableViewCell: UITableViewCell {
     @IBOutlet weak var subtitleLabel: UILabel!
     @IBOutlet weak var imageLabel: UIImageView!
     
-    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
@@ -24,8 +23,8 @@ class UserTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
+    // Set cell labels to given users values
     func setCellData(user : NSManagedObject) {
-        
         let titleName = user.value(forKeyPath: "titleName") as! String
         let firstName = user.value(forKeyPath: "firstName") as! String
         let lastName = user.value(forKeyPath: "lastName") as! String
@@ -33,9 +32,10 @@ class UserTableViewCell: UITableViewCell {
         
         let gender = user.value(forKeyPath: "gender") as! String
         let dob = user.value(forKeyPath: "dob") as! String
-        
+        let date = String(dob.prefix(10))
+
         titleLabel.text = title
-        subtitleLabel.text = "\(gender.capitalizingFirstLetter()) \(dob)"
+        subtitleLabel.text = "\(gender.capitalizingFirstLetter()) \(date)"
         
         DispatchQueue.main.async {
             UsersViewModel.UserImageSmall(user: user, imageView: self.imageLabel)

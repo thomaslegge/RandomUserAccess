@@ -45,6 +45,7 @@ class UserTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     // MARK: - Search Filter
+    /// Searches listed users or refreshes when empty
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
         if let searchString = userSearchBar.text, !searchString.isEmpty {
@@ -54,6 +55,7 @@ class UserTableViewController: UITableViewController, UISearchBarDelegate {
         }
     }
 
+    /// Searches listed users or refreshes when empty
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if let searchString = userSearchBar.text, !searchString.isEmpty {
             searchFilterUpdate(search: searchString)
@@ -62,19 +64,22 @@ class UserTableViewController: UITableViewController, UISearchBarDelegate {
         }
     }
     
+    /// Search on view model then store result and update display
     func searchFilterUpdate(search: String) {
-        UsersViewModel.SearchUsers(search: search, users: self.completeStoredUsers) { result in
+        UsersViewModel.SearchUsersFirstName(search: search, users: self.completeStoredUsers) { result in
             self.displayStoredUsers = result
             self.updateDisplay()
         }
     }
     
     // MARK: - Refresh and update
+    /// Return displayed valules to all values, allowing for dynamic search
     func refreshUsersDisplaying() {
         self.displayStoredUsers = self.completeStoredUsers
         updateDisplay()
     }
     
+    /// Called often on thread to update list of users with correct sections
     func updateDisplay() {
         DispatchQueue.main.async {
             /// MARK: - TODO Refactor
@@ -93,6 +98,7 @@ class UserTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     // MARK: - Get Data
+    /// Web request with static view model function to retrieve data from api
     func getUserData() {
         UsersViewModel.WebRequestUsers { result in
             switch result {
@@ -101,9 +107,7 @@ class UserTableViewController: UITableViewController, UISearchBarDelegate {
             case .success(let users):
                 // Main thread for UI
                 DispatchQueue.main.async {
-                    for user in users {
-                        self.SaveUserLocal(user: user)
-                    }
+                    self.SaveUsersLocal(users)
                     self.LoadUserLocal()
                     self.scrollRefreshControll.endRefreshing()
                     self.refreshUsersDisplaying()
@@ -112,50 +116,21 @@ class UserTableViewController: UITableViewController, UISearchBarDelegate {
         }
     }
     
-    // MARK: - Core Data
+    // MARK: - Core Data Helper
+    /// Local Caller Helper for view model static func
     func LoadUserLocal() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return}
-        let managedContext = appDelegate.persistentContainer.viewContext
-        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "StoredUser")
-        do {
-            self.completeStoredUsers = try managedContext.fetch(fetchRequest)
-        } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
+        UsersViewModel.LoadUserLocal() { result in
+            self.completeStoredUsers = result
+            self.refreshUsersDisplaying()
         }
-        refreshUsersDisplaying()
     }
     
-    // TODO: - Refactor
-    func SaveUserLocal(user: User) {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            return
-        }
-        
-        let managedContext = appDelegate.persistentContainer.viewContext
-        let entity = NSEntityDescription.entity(forEntityName: "StoredUser", in: managedContext)!
-        let userToSave = NSManagedObject(entity: entity, insertInto: managedContext)
-        
-        userToSave.setValue(user.login?.uuid, forKey: "id")
-        userToSave.setValue(user.name?.first, forKey: "firstName")
-        userToSave.setValue(user.name?.last, forKey: "lastName")
-        userToSave.setValue(user.name?.title, forKey: "titleName")
-        userToSave.setValue(user.phone, forKey: "phoneNumber")
-        userToSave.setValue(user.email, forKey: "email")
-        userToSave.setValue(user.dob?.date, forKey: "dob")
-        userToSave.setValue(user.gender, forKey: "gender")
-        
-        userToSave.setValue(user.picture?.thumbnail, forKey: "imageUrlSmall")
-        userToSave.setValue(user.picture?.large, forKey: "imageUrlLarge")
-        
-        do {
-            try managedContext.save()
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
-        }
+    /// Local Caller Helper for view model static func
+    func SaveUsersLocal(_ users: [User]) {
+        UsersViewModel.SaveUsersLocal(users)
     }
     
     // MARK: - Table view data source
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "UserTabelViewCell", for: indexPath) as! UserTableViewCell
         let user = userSectionsDisplay[indexPath.section].users[indexPath.row]
@@ -183,53 +158,3 @@ class UserTableViewController: UITableViewController, UISearchBarDelegate {
         }
     }
 }
-
-// MARK: - Refactor
-
-//    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return displayStoredUsers.count
-//    }
-//
-//    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCell(withIdentifier: "UserTabelViewCell", for: indexPath) as! UserTableViewCell
-//
-//        cell.setCellData(user: displayStoredUsers[indexPath.row])
-//        //        cell.titleLabel.text = displayStoredUsers[indexPath.row].value(forKeyPath: "firstName") as? String
-//
-//        return cell
-//    }
-
-/*
- // Override to support conditional editing of the table view.
- override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
- // Return false if you do not want the specified item to be editable.
- return true
- }
- */
-
-/*
- // Override to support editing the table view.
- override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
- if editingStyle == .delete {
- // Delete the row from the data source
- tableView.deleteRows(at: [indexPath], with: .fade)
- } else if editingStyle == .insert {
- // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
- }
- }
- */
-
-/*
- // Override to support rearranging the table view.
- override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
- 
- }
- */
-
-/*
- // Override to support conditional rearranging of the table view.
- override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
- // Return false if you do not want the item to be re-orderable.
- return true
- }
- */
