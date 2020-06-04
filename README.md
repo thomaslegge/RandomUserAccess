@@ -17,7 +17,7 @@
 - Web image cache saving only what you need when you need it to keep memory footprint low
 
 ## In the future:
-- The data is solid, however the images are very low res, I would like to use [Unsplash](https://unsplash.com/t/people) for portraits
+- The data is solid, however the images are very low res, I would like to use [Unsplash](https://unsplash.com/t/people) API for portraits
 - I woud like to work on the UI and make some visual changed to how the information is displayed, it is very simple as the focus was on the performant data storage and searching/retreival
 
 ### I would like the different data points displayed to link elsewhere eg:
